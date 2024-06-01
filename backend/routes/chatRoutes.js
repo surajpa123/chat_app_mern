@@ -88,6 +88,7 @@ router.post("/group", auth, async (req, res) => {
       isGroupChat: true,
       groupAdmin: req.user,
     });
+    
 
     const fullGroupChat = await Chat.findOne({
       _id: groupChat?._id,

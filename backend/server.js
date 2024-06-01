@@ -20,12 +20,16 @@ const userRoutes = require("./routes/users");
 
 const chatRoutes = require("./routes/chatRoutes");
 
+const messageRoutes = require("./routes/messageRoutes");
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 
 app.use("/api/chat", chatRoutes);
+
+app.use("/api/message", messageRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)

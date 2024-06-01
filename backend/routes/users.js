@@ -5,10 +5,7 @@ const router = express.Router();
 const User = require("../models/userModel")
 
 router.get("/me", auth, (req, res) => {
-  res.send({
-    userId: req.user._id,
-    username: req.user.username,
-  });
+  res.send(req.user);
 });
 
 router.get("/allusers",auth, async (req, res) => {
@@ -21,9 +18,7 @@ router.get("/allusers",auth, async (req, res) => {
       }
     : {};
 
-  const users = await User.find(keyword)
-
-//   .find({_id: {$ne:req.user.id}})
+  const users = await User.find(keyword).find({_id: {$ne:req.user.id}})
   res.send(users)
 
 });

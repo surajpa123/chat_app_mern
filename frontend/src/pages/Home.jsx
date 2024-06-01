@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import MyChats from "../Components/MyChats";
+import SingleChat from "../Components/SingleChat";
 
 const Home = ({ currentUser, setSelectedChat, selectedChat }) => {
   const navigate = useNavigate();
@@ -13,20 +14,28 @@ const Home = ({ currentUser, setSelectedChat, selectedChat }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar
-        currentUser={currentUser}
-        onUserSelect={handleChat}
-        setSelectedChat={setSelectedChat}
-      />
-     
-     <MyChats
+    <div className="min-h-screen w-full">
+      <div className="flex flex-col flex-1">
+        <Navbar
+          currentUser={currentUser}
+          onUserSelect={handleChat}
+          setSelectedChat={setSelectedChat}
+        />
+      </div>
+
+      <div className="flex">
+        <MyChats
           chats={chats}
           selectedChat={selectedChat}
           setSelectedChat={setSelectedChat}
           setChats={setChats}
+          currentUser={currentUser}
         />
-     
+
+        <div className="border flex-1">
+          <SingleChat selectedChat={selectedChat} currentUser={currentUser} />
+        </div>
+      </div>
     </div>
   );
 };

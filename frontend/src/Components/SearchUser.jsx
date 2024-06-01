@@ -4,6 +4,8 @@ import axios from "axios";
 const SearchUser = ({ onUserSelect, currentUser, setSelectedChat }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const token = localStorage.getItem("token");
+
 
   const handleSearch = async (e) => {
     setSearchTerm(e.target.value);
@@ -31,7 +33,7 @@ const SearchUser = ({ onUserSelect, currentUser, setSelectedChat }) => {
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${currentUser?.token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
 

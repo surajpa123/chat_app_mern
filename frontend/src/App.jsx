@@ -4,7 +4,6 @@ import SignUp from "./Components/SignUp";
 import { fetchUserData } from "./helper/fetchUser";
 import { useEffect, useState } from "react";
 import Home from "./pages/Home";
-
 function App() {
   const [userData, setUserData] = useState();
 
@@ -12,9 +11,23 @@ function App() {
 
   const token = localStorage.getItem("token");
 
+
   useEffect(() => {
-    console.log(selectedChat, "selectedChat");
-  }, [selectedChat]);
+    const fetchData = async () => {
+      if (token) {
+        try {
+          const fetchedData = await fetchUserData(token);
+          setUserData(fetchedData);
+        } catch (error) {
+          console.error("Error fetching user data in useEffect:", error);
+        }
+      }
+    };
+
+    fetchData();
+
+   
+  }, [token]);
 
   return (
     <Router>

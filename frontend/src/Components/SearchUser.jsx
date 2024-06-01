@@ -5,6 +5,8 @@ const SearchUser = ({ onUserSelect, currentUser, setSelectedChat }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const token = localStorage.getItem("token");
+  const apiUrl = import.meta.env.VITE_API_URL;
+
 
 
   const handleSearch = async (e) => {
@@ -14,7 +16,7 @@ const SearchUser = ({ onUserSelect, currentUser, setSelectedChat }) => {
     if (e.target.value.length > 0) {
       try {
         const response = await axios.get(
-          `http://localhost:5000/user/allusers?search=${e.target.value}`,
+          `${apiUrl}/user/allusers?search=${e.target.value}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -38,7 +40,7 @@ const SearchUser = ({ onUserSelect, currentUser, setSelectedChat }) => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:5000/api/chat",
+        `${apiUrl}/api/chat`,
         {
           userId,
         },

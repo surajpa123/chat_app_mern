@@ -1,8 +1,10 @@
 import axios from 'axios';
 
 export const fetchUserData = async (token) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   try {
-    const response = await axios.get('http://localhost:5000/user/me', {
+    const response = await axios.get(`${apiUrl}/user/me`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

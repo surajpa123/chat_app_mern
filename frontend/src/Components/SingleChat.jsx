@@ -27,6 +27,8 @@ const SingleChat = ({ currentUser, selectedChat, setSelectedChat }) => {
 
   const token = localStorage.getItem("token");
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     if (currentUser && selectedChat) {
       setUserChats(currentUser);
@@ -51,7 +53,7 @@ const SingleChat = ({ currentUser, selectedChat, setSelectedChat }) => {
       };
       setNewMessage("");
       const { data } = await axios.post(
-        "http://localhost:5000/api/message",
+        `${apiUrl}/api/message`,
         {
           content: newMessage,
           chatId: selectedChat?._id,
@@ -79,7 +81,7 @@ const SingleChat = ({ currentUser, selectedChat, setSelectedChat }) => {
       };
 
       const { data } = await axios.get(
-        `http://localhost:5000/api/message/${selectedChat?._id}`,
+        `${apiUrl}/api/message/${selectedChat?._id}`,
         config
       );
       setMessages(data);
@@ -117,7 +119,7 @@ const SingleChat = ({ currentUser, selectedChat, setSelectedChat }) => {
     <div>
       {selectedChat?.isGroupChat ? (
         <>
-          <div className="border border-red-600 text-center text-lg">
+          <div className="border text-center text-lg">
             <h1>{selectedChat?.chatName?.toUpperCase()}</h1>
           </div>
         </>
@@ -138,18 +140,18 @@ const SingleChat = ({ currentUser, selectedChat, setSelectedChat }) => {
                   <div
                     className="items-center gap-2"
                     style={{ display: "flex" }}
-                    key={m._id}
+                    key={m?._id}
                   >
-                    {(isSameSender(messages, m, i, currentUser._id) ||
-                      isLastMessage(messages, i, currentUser._id)) && (
+                    {(isSameSender(messages, m, i, currentUser?._id) ||
+                      isLastMessage(messages, i, currentUser?._id)) && (
                       <p className="mt-2">
-                        <Avatar name={m.sender.name[0]} />
+                        <Avatar name={m?.sender?.name[0]} />
                       </p>
                     )}
                     <span
                       style={{
                         backgroundColor: `${
-                          m.sender._id === currentUser._id
+                          m.sender?._id === currentUser?._id
                             ? "#BEE3F8"
                             : "#B9F5D0"
                         }`,
@@ -157,9 +159,9 @@ const SingleChat = ({ currentUser, selectedChat, setSelectedChat }) => {
                           messages,
                           m,
                           i,
-                          currentUser._id
+                          currentUser?._id
                         ),
-                        marginTop: isSameUser(messages, m, i, currentUser._id)
+                        marginTop: isSameUser(messages, m, i, currentUser?._id)
                           ? 3
                           : 10,
                         borderRadius: "20px",
@@ -167,7 +169,7 @@ const SingleChat = ({ currentUser, selectedChat, setSelectedChat }) => {
                         maxWidth: "75%",
                       }}
                     >
-                      {m.content}
+                      {m?.content}
                     </span>
                   </div>
                 ))}

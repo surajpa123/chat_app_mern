@@ -15,28 +15,30 @@ const Home = ({ currentUser, setSelectedChat, selectedChat }) => {
 
   return (
     <div className="min-h-screen w-full">
-      <div className="flex flex-col flex-1">
-        <Navbar
-          currentUser={currentUser}
-          onUserSelect={handleChat}
-          setSelectedChat={setSelectedChat}
-        />
-      </div>
+  <div className="flex flex-col flex-1">
+    <Navbar
+      currentUser={currentUser}
+      onUserSelect={handleChat}
+      setSelectedChat={setSelectedChat}
+    />
+  </div>
 
-      <div className="flex">
-        <MyChats
-          chats={chats}
-          selectedChat={selectedChat}
-          setSelectedChat={setSelectedChat}
-          setChats={setChats}
-          currentUser={currentUser}
-        />
+  <div className="flex flex-col md:flex-row"> 
+    <MyChats
+      chats={chats}
+      selectedChat={selectedChat}
+      setSelectedChat={setSelectedChat}
+      setChats={setChats}
+      currentUser={currentUser}
+      className="md:w-1/4" 
+    />
 
-        <div className="border flex-1">
-          <SingleChat selectedChat={selectedChat} currentUser={currentUser} />
-        </div>
-      </div>
+    <div className="flex-1">
+      <SingleChat selectedChat={selectedChat} currentUser={currentUser} />
     </div>
+  </div>
+</div>
+
   );
 };
 

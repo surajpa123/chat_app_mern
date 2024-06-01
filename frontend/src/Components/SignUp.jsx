@@ -1,6 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loader from "./Loader";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -8,27 +11,41 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false); // Add loading state
+
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
 
   const handleSignUp = async () => {
+    setLoading(true);
+
+
+    if (!name || !email || !password) {
+      console.log("heyyyy")
+      toast.warning("Please fill in all fields");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await axios.post("http://localhost:5000/auth/signup", {
+      const response = await axios.post(`${apiUrl}/auth/signup`, {
         name,
         email,
         password,
       });
       console.log(response.data);
       setSuccess("User created successfully!");
-
+      setLoading(false);
       navigate("/");
-
       setError("");
     } catch (error) {
       if (error.response) {
         setError(error.response.data.message);
+        setLoading(false);
       } else {
         setError("An error occurred. Please try again.");
+        setLoading(false);
       }
       setSuccess("");
     }
@@ -98,7 +115,7 @@ const SignUp = () => {
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               onClick={handleSignUp}
             >
-              Sign up
+              {loading ? <Loader /> : "Sign up"}
             </button>
           </div>
         </form>

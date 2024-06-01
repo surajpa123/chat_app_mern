@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import FullScreenLoader from "./FullScreenLoader";
 
 const MyChats = ({
   selectedChat,
@@ -20,9 +21,12 @@ const MyChats = ({
   const [groupChatDetails, setGroupChatDetails] = useState(null);
 
   const token = localStorage.getItem("token");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const accessChat = async () => {
     try {
+      setLoading(true);
+
       const config = {
         headers: {
           "Content-type": "application/json",
@@ -30,13 +34,13 @@ const MyChats = ({
         },
       };
 
-      const { data } = await axios.get(
-        "http://localhost:5000/api/chat",
-        config
-      );
+      const { data } = await axios.get(`${apiUrl}/api/chat`, config);
       setChatList(data);
+      setLoading(false);
     } catch (error) {
       console.log("error", error);
+      setLoading(false);
+
       setError("Failed to load chats. Please try again later.");
     }
   };
@@ -61,7 +65,7 @@ const MyChats = ({
       };
 
       const { data } = await axios.post(
-        "http://localhost:5000/api/chat/group",
+        `${apiUrl}/api/chat/group`,
         body,
         config
       );
@@ -92,7 +96,7 @@ const MyChats = ({
         },
       };
       const { data } = await axios.get(
-        `http://localhost:5000/user/allusers?search=${query}`,
+        `${apiUrl}/user/allusers?search=${query}`,
         config
       );
       setSearchResult(data);
@@ -124,15 +128,11 @@ const MyChats = ({
         userId: userId,
       };
 
-      await axios.put(
-        "http://localhost:5000/api/chat/groupremove",
-        body,
-        config
-      );
+      await axios.put(`${apiUrl}/api/chat/groupremove`, body, config);
 
       setGroupChatDetails({
         ...groupChatDetails,
-        users: groupChatDetails.users.filter((user) => user._id !== userId),
+        users: groupChatDetails.users.filter((user) => user?._id !== userId),
       });
 
       accessChat();
@@ -158,14 +158,10 @@ const MyChats = ({
 
       const body = {
         chatId: chatId,
-        userId: currentUser._id,
+        userId: currentUser?._id,
       };
 
-      await axios.put(
-        "http://localhost:5000/api/chat/groupremove",
-        body,
-        config
-      );
+      await axios.put(`${apiUrl}/api/chat/groupremove`, body, config);
 
       setShowModal(false);
       accessChat();
@@ -191,7 +187,7 @@ const MyChats = ({
         userId: user?._id,
       };
 
-      await axios.put("http://localhost:5000/api/chat/groupadd", body, config);
+      await axios.put(`${apiUrl}/api/chat/groupadd`, body, config);
 
       setShowModal(false);
       setSearchResult([]);
@@ -209,7 +205,8 @@ const MyChats = ({
   }, [selectedChat, chats]);
 
   return (
-    <div className="w-1/4 p-2">
+    <div className="w-full md:w-1/4 p-2">
+      {loading && <FullScreenLoader />}
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-lg font-bold">My Chats</h2>
         <button
@@ -244,7 +241,10 @@ const MyChats = ({
                       </span>
                     </div>
                   ) : (
-                    <div onClick={()=> setSelectedChat(chat)} className="flex items-center">
+                    <div
+                      onClick={() => setSelectedChat(chat)}
+                      className="flex items-center"
+                    >
                       <img
                         src={otherUser?.picture}
                         alt="User Avatar"

@@ -1,27 +1,26 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import Loader from "./Loader"; // Import your Loader component here
 
 const SignIn = ({ setUserData }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleSignIn = async () => {
+    setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/auth/login", {
+      const response = await axios.post(`${apiUrl}/auth/login`, {
         email,
         password,
       });
-      console.log(response.data);
-
       const { token } = response.data;
-
       setUserData(response.data);
-
       localStorage.setItem("token", token);
-
       navigate("/home");
     } catch (error) {
       if (error.response) {
@@ -29,6 +28,8 @@ const SignIn = ({ setUserData }) => {
       } else {
         setError("An error occurred. Please try again.");
       }
+    } finally {
+      setLoading(false); // Set loading state to false when sign-in process ends
     }
   };
 
@@ -83,10 +84,11 @@ const SignIn = ({ setUserData }) => {
           <div>
             <button
               type="button"
+              disabled={loading} // Disable the button when loading is true
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               onClick={handleSignIn}
             >
-              Sign in
+              {loading ? <Loader /> : "Sign in"} {/* Display loader if loading, otherwise display "Sign in" */}
             </button>
           </div>
         </form>

@@ -7,8 +7,6 @@ const SearchUser = ({ onUserSelect, currentUser, setSelectedChat }) => {
   const token = localStorage.getItem("token");
   const apiUrl = import.meta.env.VITE_API_URL;
 
-
-
   const handleSearch = async (e) => {
     setSearchTerm(e.target.value);
     const token = localStorage.getItem("token");
@@ -25,10 +23,13 @@ const SearchUser = ({ onUserSelect, currentUser, setSelectedChat }) => {
       } catch (error) {
         console.error("Error fetching users:", error);
       }
-    } else {
+    }
+    if (e.target.value.length == 0) {
       setSearchResults([]);
     }
   };
+
+  useEffect(() => {}, []);
 
   const acessChat = async (userId) => {
     try {
@@ -59,7 +60,7 @@ const SearchUser = ({ onUserSelect, currentUser, setSelectedChat }) => {
         type="text"
         value={searchTerm}
         onChange={handleSearch}
-        className="block w-full py-2 pl-3 pr-10 leading-5 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        className="block w-full py-2 pl-3 pr-10 leading-5 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         placeholder="Search users..."
       />
       {searchResults.length > 0 && (

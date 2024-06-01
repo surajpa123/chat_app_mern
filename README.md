@@ -74,3 +74,29 @@ To run the application locally, follow these steps:
 8. **Start the frontend server:** `npm start`
 
 Now you can access the MyChatApp in your browser at [http://localhost:3000](http://localhost:3000).
+
+
+📝 Steps to Use MyChatApp
+
+Log In:
+
+Use the test user details provided above:
+
+Email: surajTest@mail.com
+
+Password: 123
+
+Alternatively, you can sign up to create a new account.
+Search for a User to Initialize a New Chat:
+
+Use the search bar to find a user by typing "suraj" or any other user's name or email.
+If you don’t find the user, you can create a new user from the signup page.
+Initialize a New Chat:
+
+Once you type the name or email in the search bar, a list of matching users will appear.
+Click on the user you want to chat with to initialize a new chat.
+Send Messages:
+
+Go to the "My Chats" section.
+Click on the user you want to send a message to.
+Type your message in the chat input box and press send.
